@@ -21,7 +21,7 @@ export function Topbar() {
     <header className="neo-topbar sticky top-0 z-20 border-b-2 border-foreground bg-background/92 px-3 py-3 backdrop-blur-md md:px-6">
       <div className="neo-topbar__rail mx-auto max-w-7xl">
         <div className="flex min-w-0 items-center gap-3">
-          <Link href="/" className="flex items-center gap-2" data-cursor="pointer" aria-label="VOXEL dashboard">
+          <Link href="/" className="flex items-center gap-2" data-cursor="pointer" aria-label="VOXEL">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-foreground bg-primary text-primary-foreground pixel-shadow-sm">
               <BrandMark className="h-5 w-5" />
             </span>
@@ -54,7 +54,7 @@ export function Topbar() {
 
         <div className="neo-topbar__right">
           <Link
-            href={`/payments/tr-${Math.random().toString(36).slice(2, 8)}`}
+            href="/payments/tr-new"
             className="pixel-btn inline-flex h-10 items-center gap-2 bg-primary px-3 font-pixel text-[9px] uppercase text-primary-foreground sm:px-4"
           >
             <Plus className="h-4 w-4" />
