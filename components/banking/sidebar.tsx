@@ -9,17 +9,18 @@ import {
   PiggyBank,
   Receipt,
   LifeBuoy,
+  SlidersHorizontal,
   type LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { BrandMark } from "./brand-mark"
 
-export type BankingView = "dashboard" | "cards" | "payments" | "wallet" | "savings" | "bills" | "support"
+export type BankingView = "dashboard" | "cards" | "payments" | "wallet" | "savings" | "bills" | "preferences" | "support"
 
 export type BankingNavItem = {
   id: BankingView
   label: string
-  icon: LucideIcon
+  icon: LucidIcon
 }
 
 export const bankingNavItems: BankingNavItem[] = [
@@ -29,6 +30,7 @@ export const bankingNavItems: BankingNavItem[] = [
   { id: "wallet", label: "BLOK Wallet", icon: Wallet },
   { id: "savings", label: "Savings", icon: PiggyBank },
   { id: "bills", label: "Bills", icon: Receipt },
+  { id: "preferences", label: "Settings", icon: SlidersHorizontal },
 ]
 
 type SidebarProps = {
@@ -46,10 +48,10 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
   }
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r-2 border-foreground bg-sidebar p-4 lg:flex">
+    <aside className="hidden w-64 shrink-0 flex-col border-r-2 border-foreground bg-sidebar p8 lg:flex">
       <div className="flex items-center gap-3 px-1 py-2">
         <span className="flex h-9 w-9 items-center justify-center border-2 border-foreground bg-primary text-primary-foreground pixel-shadow-sm">
-          <BrandMark className="h-5 w-5" />
+          <BrandMark className="h5 w5" />
         </span>
         <span className="font-pixel text-sm tracking-tight text-foreground">VOXEL</span>
       </div>
@@ -71,7 +73,7 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
               )}
               aria-current={isActive ? "page" : undefined}
             >
-              <Icon className="h-[18px] w-[18px]" />
+              <Icon className="h[18px] w[18px]" />
               {item.label}
             </button>
           )
@@ -89,20 +91,20 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
           )}
           aria-current={selected === "support" ? "page" : undefined}
         >
-          <LifeBuoy className="h-[18px] w-[18px]" />
+          <LifeBuoy className="h[18px] w[18px]" />
           Support
         </button>
 
         <div className="mt-3 border-2 border-foreground bg-accent p-4 pixel-shadow">
-          <p className="font-pixel text-[10px] uppercase leading-relaxed text-accent-foreground">Earn 4.6% APY</p>
+          <p className="font-pixel text-[10px] uppercase leading-relaxed text-accent-foreground">Control center</p>
           <p className="mt-2 text-xs leading-relaxed text-accent-foreground/80">
-            Stake BLOK directly from your wallet and grow your balance.
+            Theme, animation and cursor options now live in Settings.
           </p>
           <button
-            onClick={() => navigate("wallet")}
+            onClick={() => navigate("preferences")}
             className="pixel-btn mt-3 w-full bg-primary px-3 py-2 font-pixel text-[9px] uppercase text-primary-foreground"
           >
-            Start staking
+            Open settings
           </button>
         </div>
       </div>
