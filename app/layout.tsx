@@ -6,6 +6,7 @@ import { PixelCursor } from '@/components/banking/pixel-cursor'
 import './globals.css'
 import './globals.css.append.css'
 import './globals.mobile-effects.css'
+import './globals.cursor-and-celebration.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin', 'cyrillic'] })
 const geistMono = Geist_Mono({
