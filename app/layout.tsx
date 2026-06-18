@@ -7,6 +7,7 @@ import './globals.css'
 import './globals.css.append.css'
 import './globals.mobile-effects.css'
 import './globals.cursor-and-celebration.css'
+import './globals.pr6-panel-fixes.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({
