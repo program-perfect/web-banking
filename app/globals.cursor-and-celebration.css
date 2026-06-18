@@ -1,0 +1,141 @@
+/* Custom macOS-like pixel cursor and celebration effects */
+@layer components {
+  .neo-pixel-cursor {
+    position: fixed;
+    z-index: 2147483647;
+    left: 0;
+    top: 0;
+    width: 38px;
+    height: 38px;
+    pointer-events: none;
+    transform: translate3d(-160px, -160px, 0);
+    transition: opacity 0.16s ease;
+    will-change: transform;
+  }
+
+  html[data-cursor-size="large"] .neo-pixel-cursor {
+    scale: 1.28;
+  }
+
+  .neo-pixel-cursor--hidden {
+    opacity: 0;
+  }
+
+  .neo-pixel-cursor__glow {
+    position: absolute;
+    inset: -8px;
+    border: 2px solid var(--foreground);
+    border-radius: 999px;
+    opacity: 0;
+    background: color-mix(in oklch, var(--primary) 24%, transparent);
+    transform: scale(0.62);
+  }
+
+  html[data-cursor-glow="true"] .neo-pixel-cursor[data-mode="pointer"] .neo-pixel-cursor__glow,
+  html[data-cursor-glow="true"] .neo-pixel-cursor[data-mode="press"] .neo-pixel-cursor__glow,
+  html[data-cursor-glow="true"] .neo-pixel-cursor[data-mode="wait"] .neo-pixel-cursor__glow {
+    opacity: 0.72;
+    animation: neo-cursor-pulse 0.82s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  .neo-pixel-cursor__arrow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 32px;
+    image-rendering: pixelated;
+    clip-path: polygon(0 0, 0 88%, 22% 70%, 36% 100%, 52% 94%, 38% 64%, 70% 64%);
+    background: var(--card);
+    border: 0;
+    filter:
+      drop-shadow(0 0 0 var(--foreground))
+      drop-shadow(2px 0 0 var(--foreground))
+      drop-shadow(0 2px 0 var(--foreground))
+      drop-shadow(3px 3px 0 var(--foreground));
+    transition:
+      transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.16s ease,
+      background-color 0.16s ease;
+  }
+
+  .neo-pixel-cursor__badge {
+    position: absolute;
+    left: 22px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--foreground);
+    border-radius: 999px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.14s ease, transform 0.14s ease;
+  }
+
+  .neo-pixel-cursor[data-mode="pointer"] .neo-pixel-cursor__arrow {
+    transform: rotate(-8deg) scale(1.08);
+    background: var(--primary);
+  }
+
+  .neo-pixel-cursor[data-mode="pointer"] .neo-pixel-cursor__badge {
+    opacity: 1;
+  }
+
+  .neo-pixel-cursor[data-mode="press"] .neo-pixel-cursor__arrow {
+    transform: translate(3px, 3px) rotate(-8deg) scale(0.92);
+    background: var(--accent);
+    filter:
+      drop-shadow(0 0 0 var(--foreground))
+      drop-shadow(1px 0 0 var(--foreground))
+      drop-shadow(0 1px 0 var(--foreground));
+  }
+
+  .neo-pixel-cursor[data-mode="text"] .neo-pixel-cursor__arrow {
+    width: 8px;
+    height: 36px;
+    left: 12px;
+    clip-path: none;
+    background: var(--foreground);
+    filter: none;
+    animation: neo-cursor-text 0.8s steps(2, end) infinite;
+  }
+
+  .neo-pixel-cursor[data-mode="grab"] .neo-pixel-cursor__arrow,
+  .neo-pixel-cursor[data-mode="grabbing"] .neo-pixel-cursor__arrow {
+    width: 30px;
+    height: 28px;
+    clip-path: polygon(18% 12%, 34% 12%, 34% 38%, 42% 38%, 42% 6%, 58% 6%, 58% 38%, 66% 38%, 66% 16%, 82% 16%, 82% 56%, 72% 82%, 28% 82%, 18% 58%);
+    background: var(--card);
+  }
+
+  .neo-pixel-cursor[data-mode="grabbing"] .neo-pixel-cursor__arrow {
+    transform: scale(0.9) translate(3px, 3px);
+    background: var(--primary);
+  }
+
+  .neo-pixel-cursor[data-mode="wait"] .neo-pixel-cursor__arrow {
+    width: 28px;
+    height: 28px;
+    clip-path: polygon(15% 0, 85% 0, 85% 18%, 64% 50%, 85% 82%, 85% 100%, 15% 100%, 15% 82%, 36% 50%, 15% 18%);
+    background: var(--primary);
+    animation: neo-cursor-wait 0.86s steps(4, end) infinite;
+  }
+
+  .neo-pixel-cursor[data-mode="disabled"] .neo-pixel-cursor__arrow {
+    opacity: 0.55;
+    filter: grayscale(1) drop-shadow(2px 2px 0 var(--foreground));
+  }
+}
+
+@keyframes neo-cursor-pulse {
+  0% { transform: scale(0.58); opacity: 0.78; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes neo-cursor-text {
+  50% { opacity: 0.4; }
+}
+
+@keyframes neo-cursor-wait {
+  100% { transform: rotate(180deg); }
+}
