@@ -1,4 +1,5 @@
-/* Hover/focus-only animated pixel background textures for neo-brutalist panels and controls. */
+/* Hover/focus-only pixel background textures for neo-brutalist panels and controls.
+   Motion is opt-in through html[data-motion="full"] or html[data-motion="balanced"]. */
 @layer components {
   .pixel-card,
   .pixel-surface,
@@ -46,7 +47,7 @@
     background-position: 0 0, 0 0, 0 0, 0 0;
     filter: saturate(0.72) contrast(0.86);
     transform: translate3d(0, 0, 0) rotate(0.001deg);
-    will-change: background-position, transform, opacity;
+    will-change: auto;
   }
 
   .pixel-card:hover::before,
@@ -76,9 +77,70 @@
   [role="option"]:hover::before,
   [role="option"]:focus-visible::before {
     opacity: 0.065 !important;
+  }
+
+  html[data-motion="full"] .pixel-card:hover::before,
+  html[data-motion="full"] .pixel-card:focus-within::before,
+  html[data-motion="full"] .pixel-surface:hover::before,
+  html[data-motion="full"] .pixel-surface:focus-within::before,
+  html[data-motion="full"] .pixel-btn:hover::before,
+  html[data-motion="full"] .pixel-btn:focus-visible::before,
+  html[data-motion="full"] .pixel-gradient:hover::before,
+  html[data-motion="full"] .pixel-gradient:focus-within::before,
+  html[data-motion="full"] .payment-hero-card:hover::before,
+  html[data-motion="full"] .payment-hero-card:focus-within::before,
+  html[data-motion="full"] .receipt-glow-ring:hover::before,
+  html[data-motion="full"] .receipt-glow-ring:focus-within::before,
+  html[data-motion="full"] .neo-topbar:hover::after,
+  html[data-motion="full"] .neo-topbar:focus-within::after,
+  html[data-motion="full"] .neo-mobile-action:hover::before,
+  html[data-motion="full"] .neo-mobile-action:focus-visible::before,
+  html[data-motion="full"] [data-panel]:hover::before,
+  html[data-motion="full"] [data-panel]:focus-within::before,
+  html[data-motion="full"] [data-hover-panel]:hover::before,
+  html[data-motion="full"] [data-hover-panel]:focus-within::before,
+  html[data-motion="full"] [role="button"]:hover::before,
+  html[data-motion="full"] [role="button"]:focus-visible::before,
+  html[data-motion="full"] [role="tab"]:hover::before,
+  html[data-motion="full"] [role="tab"]:focus-visible::before,
+  html[data-motion="full"] [role="option"]:hover::before,
+  html[data-motion="full"] [role="option"]:focus-visible::before {
+    will-change: background-position, transform, opacity;
     animation:
       pixel-panel-pattern-drift 1.55s steps(12, end) infinite,
       pixel-panel-pattern-breathe 3.2s steps(8, end) infinite;
+  }
+
+  html[data-motion="balanced"] .pixel-card:hover::before,
+  html[data-motion="balanced"] .pixel-card:focus-within::before,
+  html[data-motion="balanced"] .pixel-surface:hover::before,
+  html[data-motion="balanced"] .pixel-surface:focus-within::before,
+  html[data-motion="balanced"] .pixel-btn:hover::before,
+  html[data-motion="balanced"] .pixel-btn:focus-visible::before,
+  html[data-motion="balanced"] .pixel-gradient:hover::before,
+  html[data-motion="balanced"] .pixel-gradient:focus-within::before,
+  html[data-motion="balanced"] .payment-hero-card:hover::before,
+  html[data-motion="balanced"] .payment-hero-card:focus-within::before,
+  html[data-motion="balanced"] .receipt-glow-ring:hover::before,
+  html[data-motion="balanced"] .receipt-glow-ring:focus-within::before,
+  html[data-motion="balanced"] .neo-topbar:hover::after,
+  html[data-motion="balanced"] .neo-topbar:focus-within::after,
+  html[data-motion="balanced"] .neo-mobile-action:hover::before,
+  html[data-motion="balanced"] .neo-mobile-action:focus-visible::before,
+  html[data-motion="balanced"] [data-panel]:hover::before,
+  html[data-motion="balanced"] [data-panel]:focus-within::before,
+  html[data-motion="balanced"] [data-hover-panel]:hover::before,
+  html[data-motion="balanced"] [data-hover-panel]:focus-within::before,
+  html[data-motion="balanced"] [role="button"]:hover::before,
+  html[data-motion="balanced"] [role="button"]:focus-visible::before,
+  html[data-motion="balanced"] [role="tab"]:hover::before,
+  html[data-motion="balanced"] [role="tab"]:focus-visible::before,
+  html[data-motion="balanced"] [role="option"]:hover::before,
+  html[data-motion="balanced"] [role="option"]:focus-visible::before {
+    will-change: background-position, transform, opacity;
+    animation:
+      pixel-panel-pattern-drift 2.6s steps(8, end) infinite,
+      pixel-panel-pattern-breathe 5.4s steps(6, end) infinite;
   }
 
   .dark .pixel-card:hover::before,
@@ -128,7 +190,37 @@
   html[data-pixel-gradients="false"] [data-hover-panel]:hover::before,
   html[data-pixel-gradients="false"] [data-hover-panel]:focus-within::before {
     opacity: 0.02 !important;
-    animation-duration: 2.2s, 4.2s;
+  }
+
+  html[data-motion="reduced"] .pixel-card:hover::before,
+  html[data-motion="reduced"] .pixel-card:focus-within::before,
+  html[data-motion="reduced"] .pixel-surface:hover::before,
+  html[data-motion="reduced"] .pixel-surface:focus-within::before,
+  html[data-motion="reduced"] .pixel-btn:hover::before,
+  html[data-motion="reduced"] .pixel-btn:focus-visible::before,
+  html[data-motion="reduced"] .pixel-gradient:hover::before,
+  html[data-motion="reduced"] .pixel-gradient:focus-within::before,
+  html[data-motion="reduced"] .payment-hero-card:hover::before,
+  html[data-motion="reduced"] .payment-hero-card:focus-within::before,
+  html[data-motion="reduced"] .receipt-glow-ring:hover::before,
+  html[data-motion="reduced"] .receipt-glow-ring:focus-within::before,
+  html[data-motion="reduced"] .neo-topbar:hover::after,
+  html[data-motion="reduced"] .neo-topbar:focus-within::after,
+  html[data-motion="reduced"] .neo-mobile-action:hover::before,
+  html[data-motion="reduced"] .neo-mobile-action:focus-visible::before,
+  html[data-motion="reduced"] [data-panel]:hover::before,
+  html[data-motion="reduced"] [data-panel]:focus-within::before,
+  html[data-motion="reduced"] [data-hover-panel]:hover::before,
+  html[data-motion="reduced"] [data-hover-panel]:focus-within::before,
+  html[data-motion="reduced"] [role="button"]:hover::before,
+  html[data-motion="reduced"] [role="button"]:focus-visible::before,
+  html[data-motion="reduced"] [role="tab"]:hover::before,
+  html[data-motion="reduced"] [role="tab"]:focus-visible::before,
+  html[data-motion="reduced"] [role="option"]:hover::before,
+  html[data-motion="reduced"] [role="option"]:focus-visible::before {
+    animation: none !important;
+    background-position: 0 0, 0 0, 0 0, 0 0 !important;
+    transform: none !important;
   }
 
   @media (hover: none), (pointer: coarse), (max-width: 1023px) {
@@ -159,6 +251,34 @@
     [role="option"]:hover::before,
     [role="option"]:focus-visible::before {
       opacity: 0.032 !important;
+    }
+
+    html[data-motion="full"] .pixel-card:hover::before,
+    html[data-motion="full"] .pixel-card:focus-within::before,
+    html[data-motion="full"] .pixel-surface:hover::before,
+    html[data-motion="full"] .pixel-surface:focus-within::before,
+    html[data-motion="full"] .pixel-btn:hover::before,
+    html[data-motion="full"] .pixel-btn:focus-visible::before,
+    html[data-motion="full"] .pixel-gradient:hover::before,
+    html[data-motion="full"] .pixel-gradient:focus-within::before,
+    html[data-motion="full"] .payment-hero-card:hover::before,
+    html[data-motion="full"] .payment-hero-card:focus-within::before,
+    html[data-motion="full"] .receipt-glow-ring:hover::before,
+    html[data-motion="full"] .receipt-glow-ring:focus-within::before,
+    html[data-motion="full"] .neo-topbar:hover::after,
+    html[data-motion="full"] .neo-topbar:focus-within::after,
+    html[data-motion="full"] .neo-mobile-action:hover::before,
+    html[data-motion="full"] .neo-mobile-action:focus-visible::before,
+    html[data-motion="full"] [data-panel]:hover::before,
+    html[data-motion="full"] [data-panel]:focus-within::before,
+    html[data-motion="full"] [data-hover-panel]:hover::before,
+    html[data-motion="full"] [data-hover-panel]:focus-within::before,
+    html[data-motion="full"] [role="button"]:hover::before,
+    html[data-motion="full"] [role="button"]:focus-visible::before,
+    html[data-motion="full"] [role="tab"]:hover::before,
+    html[data-motion="full"] [role="tab"]:focus-visible::before,
+    html[data-motion="full"] [role="option"]:hover::before,
+    html[data-motion="full"] [role="option"]:focus-visible::before {
       animation-duration: 2.4s, 4.8s;
     }
   }
