@@ -1,6 +1,6 @@
 "use client"
 
-import { type FormEvent, useMemo, useState } from "react"
+import { type FormEvent, type ReactNode, useState } from "react"
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -24,6 +24,7 @@ import {
   Target,
   Wallet,
   Zap,
+  type LucideIcon,
 } from "lucide-react"
 import { Sidebar, bankingNavItems, type BankingView } from "@/components/banking/sidebar"
 import { Topbar } from "@/components/banking/topbar"
@@ -34,8 +35,13 @@ import { TransactionsList } from "@/components/banking/transactions-list"
 import { CryptoWallet } from "@/components/banking/crypto-wallet"
 import { SpendingBreakdown } from "@/components/banking/spending-breakdown"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { accounts, cards, contacts, cryptoAssets, formatUsd, transactions, type Contact } from "@/lib/bank-data"
+import { cards, contacts, cryptoAssets, formatUsd, transactions, type Contact } from "@/lib/bank-data"
 import { cn } from "@/lib/utils"
+
+const panel = "pixel-card p-5 md:p-6"
+const inset = "border-2 border-border bg-secondary/60"
+const hardInset = "border-2 border-foreground bg-card"
+const pixelButton = "pixel-btn inline-flex items-center justify-center gap-2 font-pixel text-[10px] uppercase"
 
 const viewCopy: Record<BankingView, { title: string; description: string }> = {
   dashboard: {
@@ -242,14 +248,8 @@ function PaymentsView() {
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-      <section className="pixel-card p-5 md:p-6 lg:col-span-2">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="font-pixel text-[9px] uppercase tracking-wider text-muted-foreground">Transfer desk</p>
-            <h2 className="mt-2 text-xl font-semibold text-foreground">Send money to a contact</h2>
-          </div>
-          <StatusPill tone="success">Secure rail online</StatusPill>
-        </div>
+      <section className={cn(panel, "lg:col-span-2")}>
+        <SectionHeader kicker="Transfer desk" title="Send money to a contact" badge="Secure rail online" />
 
         <form onSubmit={sendPayment} className="mt-5 grid gap-5 xl:grid-cols-[1fr_280px]">
           <div>
@@ -269,11 +269,7 @@ function PaymentsView() {
                     )}
                     aria-pressed={isActive}
                   >
-                    <Avatar className="h-11 w-11 rounded-none">
-                      <AvatarFallback className="rounded-none bg-primary font-pixel text-[10px] text-primary-foreground">
-                        {person.initials}
-                      </AvatarFallback>
-                    </Avatar>
+                    <SquareAvatar initials={person.initials} active={isActive} />
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-semibold text-foreground">{person.name}</span>
                       <span className="block truncate text-xs text-muted-foreground">{person.handle}</span>
@@ -284,25 +280,23 @@ function PaymentsView() {
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-[180px_1fr]">
-              <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Amount</span>
+              <Field label="Amount">
                 <input
                   type="number"
                   min="1"
                   value={amount}
                   onChange={(event) => setAmount(Number(event.target.value))}
-                  className="mt-2 h-12 w-full border-2 border-foreground bg-secondary px-3 text-lg font-semibold tabular-nums outline-none focus:bg-card"
+                  className="h-12 w-full border-2 border-foreground bg-secondary px-3 text-lg font-semibold tabular-nums outline-none focus:bg-card"
                 />
-              </label>
-              <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Note</span>
+              </Field>
+              <Field label="Note">
                 <input
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
                   placeholder="Dinner, rent, split bill…"
-                  className="mt-2 h-12 w-full border-2 border-foreground bg-secondary px-3 text-sm outline-none placeholder:text-muted-foreground focus:bg-card"
+                  className="h-12 w-full border-2 border-foreground bg-secondary px-3 text-sm outline-none placeholder:text-muted-foreground focus:bg-card"
                 />
-              </label>
+              </Field>
             </div>
           </div>
 
@@ -314,7 +308,7 @@ function PaymentsView() {
               <PreviewRow label="Amount" value={formatUsd(-amount)} emphasis />
               <PreviewRow label="Fee" value="$0.00" />
             </div>
-            <button className="pixel-btn mt-5 inline-flex w-full items-center justify-center gap-2 bg-primary px-4 py-3 font-pixel text-[10px] uppercase text-primary-foreground">
+            <button className={cn(pixelButton, "mt-5 w-full bg-primary px-4 py-3 text-primary-foreground")}>
               {sentTo ? <Check className="h-4 w-4" /> : <Send className="h-4 w-4" />}
               {sentTo ? `Sent to ${sentTo.split(" ")[0]}` : "Send payment"}
             </button>
@@ -322,31 +316,29 @@ function PaymentsView() {
         </form>
       </section>
 
-      <section className="pixel-card p-5 md:p-6">
+      <section className={panel}>
         <div className="flex items-center gap-2">
           <Plus className="h-4 w-4 text-primary" />
           <h2 className="text-base font-semibold text-foreground">Add contact</h2>
         </div>
         <form onSubmit={addContact} className="mt-4 space-y-3">
-          <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Full name</span>
+          <Field label="Full name">
             <input
               value={newName}
               onChange={(event) => setNewName(event.target.value)}
               placeholder="New recipient"
-              className="mt-2 h-11 w-full border-2 border-foreground bg-secondary px-3 text-sm outline-none placeholder:text-muted-foreground focus:bg-card"
+              className="h-11 w-full border-2 border-foreground bg-secondary px-3 text-sm outline-none placeholder:text-muted-foreground focus:bg-card"
             />
-          </label>
-          <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Handle</span>
+          </Field>
+          <Field label="Handle">
             <input
               value={newHandle}
               onChange={(event) => setNewHandle(event.target.value)}
               placeholder="@handle"
-              className="mt-2 h-11 w-full border-2 border-foreground bg-secondary px-3 text-sm outline-none placeholder:text-muted-foreground focus:bg-card"
+              className="h-11 w-full border-2 border-foreground bg-secondary px-3 text-sm outline-none placeholder:text-muted-foreground focus:bg-card"
             />
-          </label>
-          <button className="pixel-btn inline-flex w-full items-center justify-center gap-2 bg-card px-4 py-3 font-pixel text-[10px] uppercase text-foreground">
+          </Field>
+          <button className={cn(pixelButton, "w-full bg-card px-4 py-3 text-foreground")}>
             <Plus className="h-4 w-4" />
             Save contact
           </button>
@@ -359,7 +351,7 @@ function PaymentsView() {
         </div>
       </section>
 
-      <section className="pixel-card p-5 md:p-6 lg:col-span-3">
+      <section className={cn(panel, "lg:col-span-3")}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-base font-semibold text-foreground">Operation history</h2>
           <div className="relative w-full max-w-xs">
@@ -392,23 +384,13 @@ function CardsView() {
       <div className="grid gap-5">
         <MetricCard icon={CreditCard} label="Available on cards" value={formatUsd(available)} detail={`${cards.length} issued cards`} />
         <MetricCard icon={Lock} label="Frozen cards" value={String(frozenCount)} detail="Instant freeze controls" />
-        <section className="pixel-card p-5">
-          <h2 className="text-base font-semibold text-foreground">Card controls</h2>
-          <div className="mt-4 grid gap-3">
-            {["Create virtual card", "Change spending limit", "Reveal card details", "Replace physical card"].map((label) => (
-              <button key={label} className="flex items-center justify-between border-2 border-foreground bg-card px-3 py-3 text-sm font-semibold hover:bg-secondary">
-                {label}
-                <ArrowUpRight className="h-4 w-4 text-primary" />
-              </button>
-            ))}
-          </div>
-        </section>
+        <ActionPanel title="Card controls" actions={["Create virtual card", "Change spending limit", "Reveal card details", "Replace physical card"]} />
       </div>
-      <section className="pixel-card p-5 md:p-6 lg:col-span-3">
+      <section className={cn(panel, "lg:col-span-3")}>
         <h2 className="text-base font-semibold text-foreground">Recent card activity</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {transactions.slice(0, 4).map((tx) => (
-            <div key={tx.id} className="flex items-center justify-between border-2 border-border bg-secondary/60 p-3">
+            <div key={tx.id} className={cn(inset, "flex items-center justify-between gap-3 p-3")}>
               <div>
                 <p className="text-sm font-semibold text-foreground">{tx.merchant}</p>
                 <p className="text-xs text-muted-foreground">{tx.category} · {tx.date}</p>
@@ -433,7 +415,7 @@ function WalletView() {
       <div className="grid gap-5">
         <MetricCard icon={Wallet} label="Wallet value" value={formatUsd(totalAssets)} detail="Across BLOK assets" />
         <MetricCard icon={Zap} label="Staking APY" value="4.6%" detail="Rewards settle daily" />
-        <section className="pixel-card p-5">
+        <section className={panel}>
           <h2 className="text-base font-semibold text-foreground">Chain actions</h2>
           <div className="mt-4 grid grid-cols-3 gap-2">
             {[
@@ -449,11 +431,11 @@ function WalletView() {
           </div>
         </section>
       </div>
-      <section className="pixel-card p-5 md:p-6 lg:col-span-3">
+      <section className={cn(panel, "lg:col-span-3")}>
         <h2 className="text-base font-semibold text-foreground">Wallet operations</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-3">
           {walletOperations.map((operation) => (
-            <div key={operation.id} className="border-2 border-border bg-secondary/60 p-4">
+            <div key={operation.id} className={cn(inset, "p-4")}>
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm font-semibold text-foreground">{operation.label}</p>
                 <StatusPill tone="success">{operation.status}</StatusPill>
@@ -478,13 +460,13 @@ function SavingsView() {
       <MetricCard icon={Target} label="Target total" value={formatUsd(targetTotal)} detail="3 active vaults" />
       <MetricCard icon={Landmark} label="Monthly auto-save" value="$700" detail="Rules active" />
 
-      <section className="pixel-card p-5 md:p-6 lg:col-span-2">
+      <section className={cn(panel, "lg:col-span-2")}>
         <h2 className="text-base font-semibold text-foreground">Savings vaults</h2>
         <div className="mt-4 space-y-4">
           {savingsVaults.map((vault) => {
             const progress = Math.round((vault.saved / vault.target) * 100)
             return (
-              <div key={vault.id} className="border-2 border-border bg-secondary/60 p-4">
+              <div key={vault.id} className={cn(inset, "p-4")}>
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-foreground">{vault.name}</p>
@@ -502,17 +484,17 @@ function SavingsView() {
         </div>
       </section>
 
-      <section className="pixel-card p-5 md:p-6">
+      <section className={panel}>
         <h2 className="text-base font-semibold text-foreground">Smart rules</h2>
         <div className="mt-4 space-y-3">
           {["Round every purchase to the next dollar", "Move 12% of salary into Emergency fund", "Boost Japan trip vault every Friday"].map((rule) => (
-            <div key={rule} className="flex gap-3 border-2 border-border bg-card p-3">
+            <div key={rule} className={cn(inset, "flex gap-3 p-3")}>
               <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
               <p className="text-sm text-foreground">{rule}</p>
             </div>
           ))}
         </div>
-        <button className="pixel-btn mt-5 inline-flex w-full items-center justify-center gap-2 bg-primary px-4 py-3 font-pixel text-[10px] uppercase text-primary-foreground">
+        <button className={cn(pixelButton, "mt-5 w-full bg-primary px-4 py-3 text-primary-foreground")}>
           <Plus className="h-4 w-4" />
           Add rule
         </button>
@@ -530,10 +512,10 @@ function BillsView() {
       <MetricCard icon={CalendarClock} label="Autopay enabled" value="3" detail="No missed bills" />
       <MetricCard icon={FileText} label="Paid this month" value="$19.00" detail="1 bill settled" />
 
-      <section className="pixel-card p-5 md:p-6 lg:col-span-2">
+      <section className={cn(panel, "lg:col-span-2")}>
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-base font-semibold text-foreground">Upcoming bills</h2>
-          <button className="pixel-btn bg-primary px-3 py-2 font-pixel text-[9px] uppercase text-primary-foreground">Add bill</button>
+          <button className={cn(pixelButton, "bg-primary px-3 py-2 text-primary-foreground")}>Add bill</button>
         </div>
         <div className="mt-4 divide-y-2 divide-border border-2 border-foreground bg-card">
           {bills.map((bill) => (
@@ -558,7 +540,7 @@ function BillsView() {
         </div>
       </section>
 
-      <section className="pixel-card p-5 md:p-6">
+      <section className={panel}>
         <h2 className="text-base font-semibold text-foreground">Bill health</h2>
         <div className="mt-4 space-y-3">
           <InfoLine icon={ShieldCheck} label="Payment protection" value="Active" />
@@ -573,14 +555,8 @@ function BillsView() {
 function SupportView() {
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-      <section className="pixel-card p-5 md:p-6 lg:col-span-2">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="font-pixel text-[9px] uppercase tracking-wider text-muted-foreground">Help center</p>
-            <h2 className="mt-2 text-xl font-semibold text-foreground">How can we help?</h2>
-          </div>
-          <StatusPill tone="success">Avg reply 4 min</StatusPill>
-        </div>
+      <section className={cn(panel, "lg:col-span-2")}>
+        <SectionHeader kicker="Help center" title="How can we help?" badge="Avg reply 4 min" />
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
           {[
             { label: "Chat with agent", icon: MessageCircle },
@@ -610,7 +586,7 @@ function SupportView() {
         </div>
       </section>
 
-      <section className="pixel-card p-5 md:p-6">
+      <section className={panel}>
         <h2 className="text-base font-semibold text-foreground">Security checklist</h2>
         <div className="mt-4 space-y-3">
           <InfoLine icon={ShieldCheck} label="Passkey" value="Enabled" />
@@ -632,8 +608,8 @@ function PaymentsMiniPanel() {
   const recentTransfer = paymentHistorySeed[0]
 
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm md:p-6">
-      <div className="flex items-center justify-between">
+    <section className={panel}>
+      <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold text-foreground">Payments</h2>
           <p className="text-xs text-muted-foreground">Contacts and transfers</p>
@@ -649,7 +625,7 @@ function PaymentsMiniPanel() {
           </Avatar>
         ))}
       </div>
-      <div className="mt-4 border-2 border-border bg-secondary/60 p-3">
+      <div className={cn(inset, "mt-4 p-3")}>
         <p className="text-xs text-muted-foreground">Latest operation</p>
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="truncate text-sm font-semibold text-foreground">{recentTransfer.name}</p>
@@ -660,9 +636,25 @@ function PaymentsMiniPanel() {
   )
 }
 
-function MetricCard({ icon: Icon, label, value, detail }: { icon: typeof Wallet; label: string; value: string; detail: string }) {
+function ActionPanel({ title, actions }: { title: string; actions: string[] }) {
   return (
-    <section className="pixel-card p-5">
+    <section className={panel}>
+      <h2 className="text-base font-semibold text-foreground">{title}</h2>
+      <div className="mt-4 grid gap-3">
+        {actions.map((label) => (
+          <button key={label} className="flex items-center justify-between border-2 border-foreground bg-card px-3 py-3 text-sm font-semibold hover:bg-secondary">
+            {label}
+            <ArrowUpRight className="h-4 w-4 text-primary" />
+          </button>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function MetricCard({ icon: Icon, label, value, detail }: { icon: LucideIcon; label: string; value: string; detail: string }) {
+  return (
+    <section className={panel}>
       <div className="flex items-center justify-between gap-3">
         <span className="flex h-10 w-10 items-center justify-center border-2 border-foreground bg-secondary">
           <Icon className="h-4 w-4 text-primary" />
@@ -680,11 +672,7 @@ function HistoryRow({ item }: { item: PaymentHistoryItem }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 p-4">
       <div className="flex items-center gap-3">
-        <Avatar className="h-10 w-10 rounded-none">
-          <AvatarFallback className="rounded-none bg-secondary text-xs font-semibold text-secondary-foreground">
-            {item.initials}
-          </AvatarFallback>
-        </Avatar>
+        <SquareAvatar initials={item.initials} />
         <div>
           <p className="text-sm font-semibold text-foreground">{item.name}</p>
           <p className="text-xs text-muted-foreground">{item.handle} · {item.date}</p>
@@ -702,6 +690,27 @@ function HistoryRow({ item }: { item: PaymentHistoryItem }) {
   )
 }
 
+function SectionHeader({ kicker, title, badge }: { kicker: string; title: string; badge: string }) {
+  return (
+    <div className="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <p className="font-pixel text-[9px] uppercase tracking-wider text-muted-foreground">{kicker}</p>
+        <h2 className="mt-2 text-xl font-semibold text-foreground">{title}</h2>
+      </div>
+      <StatusPill tone="success">{badge}</StatusPill>
+    </div>
+  )
+}
+
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
+      {children}
+    </label>
+  )
+}
+
 function PreviewRow({ label, value, emphasis }: { label: string; value: string; emphasis?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3">
@@ -711,9 +720,9 @@ function PreviewRow({ label, value, emphasis }: { label: string; value: string; 
   )
 }
 
-function InfoLine({ icon: Icon, label, value }: { icon: typeof Wallet; label: string; value: string }) {
+function InfoLine({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-2 border-border bg-secondary/60 p-3">
+    <div className={cn(inset, "flex items-center justify-between gap-3 p-3")}>
       <span className="flex items-center gap-2 text-sm text-foreground">
         <Icon className="h-4 w-4 text-primary" />
         {label}
@@ -723,14 +732,24 @@ function InfoLine({ icon: Icon, label, value }: { icon: typeof Wallet; label: st
   )
 }
 
-function StatusPill({ children, tone }: { children: React.ReactNode; tone: "success" | "warning" | "info" }) {
+function SquareAvatar({ initials, active }: { initials: string; active?: boolean }) {
+  return (
+    <Avatar className={cn("h-10 w-10 rounded-none border-2", active ? "border-foreground" : "border-transparent")}>
+      <AvatarFallback className="rounded-none bg-secondary text-xs font-semibold text-secondary-foreground">
+        {initials}
+      </AvatarFallback>
+    </Avatar>
+  )
+}
+
+function StatusPill({ children, tone }: { children: ReactNode; tone: "success" | "warning" | "info" }) {
   return (
     <span
       className={cn(
-        "inline-flex w-fit items-center border px-2 py-1 text-[10px] font-semibold uppercase tracking-wide",
-        tone === "success" && "border-primary bg-accent text-accent-foreground",
+        "inline-flex w-fit items-center border-2 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide",
+        tone === "success" && "border-foreground bg-accent text-accent-foreground",
         tone === "warning" && "border-foreground bg-secondary text-foreground",
-        tone === "info" && "border-border bg-card text-muted-foreground",
+        tone === "info" && "border-foreground bg-card text-muted-foreground",
       )}
     >
       {children}
