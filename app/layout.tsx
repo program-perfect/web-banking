@@ -8,10 +8,10 @@ import './globals.css.append.css'
 import './globals.mobile-effects.css'
 import './globals.cursor-and-celebration.css'
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin', 'cyrillic'] })
+const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
-  subsets: ['latin', 'cyrillic'],
+  subsets: ['latin'],
 })
 const pressStart = Press_Start_2P({
   variable: '--font-press-start',
