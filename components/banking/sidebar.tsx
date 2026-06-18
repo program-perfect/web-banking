@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 import {
   LayoutDashboard,
@@ -15,12 +16,12 @@ import {
 import { cn } from "@/lib/utils"
 import { BrandMark } from "./brand-mark"
 
-export type BankingView = "dashboard" | "cards" | "payments" | "wallet" | "savings" | "bills" | "preferences" | "support"
+export type BankingView = "dashboard" | "cards" | "payments" | "wallet" | "savings" | "bills" | "support"
 
 export type BankingNavItem = {
   id: BankingView
   label: string
-  icon: LucidIcon
+  icon: LucideIcon
 }
 
 export const bankingNavItems: BankingNavItem[] = [
@@ -30,7 +31,6 @@ export const bankingNavItems: BankingNavItem[] = [
   { id: "wallet", label: "BLOK Wallet", icon: Wallet },
   { id: "savings", label: "Savings", icon: PiggyBank },
   { id: "bills", label: "Bills", icon: Receipt },
-  { id: "preferences", label: "Settings", icon: SlidersHorizontal },
 ]
 
 type SidebarProps = {
@@ -48,10 +48,10 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
   }
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r-2 border-foreground bg-sidebar p8 lg:flex">
+    <aside className="hidden w-64 shrink-0 flex-col border-r-2 border-foreground bg-sidebar p-4 lg:flex">
       <div className="flex items-center gap-3 px-1 py-2">
         <span className="flex h-9 w-9 items-center justify-center border-2 border-foreground bg-primary text-primary-foreground pixel-shadow-sm">
-          <BrandMark className="h5 w5" />
+          <BrandMark className="h-5 w-5" />
         </span>
         <span className="font-pixel text-sm tracking-tight text-foreground">VOXEL</span>
       </div>
@@ -66,14 +66,14 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
               key={item.id}
               onClick={() => navigate(item.id)}
               className={cn(
-                "flex items-center gap-3 border-2 px-3 py-2.5 text-sm font-semibold transition-all duration-150",
+                "flex cursor-pointer items-center gap-3 border-2 px-3 py-2.5 text-sm font-semibold transition-all duration-150",
                 isActive
                   ? "border-foreground bg-primary text-primary-foreground pixel-shadow-sm"
                   : "border-transparent text-muted-foreground hover:border-foreground hover:bg-secondary hover:text-foreground",
               )}
               aria-current={isActive ? "page" : undefined}
             >
-              <Icon className="h[18px] w[18px]" />
+              <Icon className="h-[18px] w-[18px]" />
               {item.label}
             </button>
           )
@@ -81,17 +81,25 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
       </nav>
 
       <div className="mt-auto flex flex-col gap-1.5">
+        <Link
+          href="/preferences"
+          className="flex cursor-pointer items-center gap-3 border-2 border-transparent px-3 py-2.5 text-sm font-semibold text-muted-foreground transition-all hover:border-foreground hover:bg-secondary hover:text-foreground"
+        >
+          <SlidersHorizontal className="h-[18px] w-[18px]" />
+          Settings
+        </Link>
+
         <button
           onClick={() => navigate("support")}
           className={cn(
-            "flex items-center gap-3 border-2 px-3 py-2.5 text-sm font-semibold transition-all",
+            "flex cursor-pointer items-center gap-3 border-2 px-3 py-2.5 text-sm font-semibold transition-all",
             selected === "support"
               ? "border-foreground bg-primary text-primary-foreground pixel-shadow-sm"
               : "border-transparent text-muted-foreground hover:border-foreground hover:bg-secondary hover:text-foreground",
           )}
           aria-current={selected === "support" ? "page" : undefined}
         >
-          <LifeBuoy className="h[18px] w[18px]" />
+          <LifeBuoy className="h-[18px] w-[18px]" />
           Support
         </button>
 
@@ -100,12 +108,12 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
           <p className="mt-2 text-xs leading-relaxed text-accent-foreground/80">
             Theme, animation and cursor options now live in Settings.
           </p>
-          <button
-            onClick={() => navigate("preferences")}
-            className="pixel-btn mt-3 w-full bg-primary px-3 py-2 font-pixel text-[9px] uppercase text-primary-foreground"
+          <Link
+            href="/preferences"
+            className="pixel-btn mt-3 inline-flex w-full cursor-pointer justify-center bg-primary px-3 py-2 font-pixel text-[9px] uppercase text-primary-foreground"
           >
             Open settings
-          </button>
+          </Link>
         </div>
       </div>
     </aside>
