@@ -1,14 +1,16 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Press_Start_2P } from 'next/font/google'
+import { AppPreferencesProvider } from '@/components/banking/app-preferences'
 import { PixelCursor } from '@/components/banking/pixel-cursor'
 import './globals.css'
 import './globals.css.append.css'
+import './globals.mobile-effects.css'
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
+const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin', 'cyrillic'] })
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
 })
 const pressStart = Press_Start_2P({
   variable: '--font-press-start',
@@ -18,7 +20,7 @@ const pressStart = Press_Start_2P({
 
 export const metadata: Metadata = {
   title: 'VOXEL — Pixel Banking',
-  description: 'A pixel-art web bank. Manage balances, cards, payments and VOXEL chain assets.',
+  description: 'A neo-brutalist pixel banking interface with transfers, settings, cursor controls and localized flows.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -51,12 +53,14 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ru"
       className={`light ${geistSans.variable} ${geistMono.variable} ${pressStart.variable} bg-background`}
     >
-      <body className="font-sans antialiased">
-        <PixelCursor />
-        {children}
+      <body className="font-mono antialiased">
+        <AppPreferencesProvider>
+          <PixelCursor />
+          {children}
+        </AppPreferencesProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
