@@ -16,17 +16,19 @@ export function TransactionsList() {
   })
 
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm md:p-6">
+    <section className="pixel-card p-5 md:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-base font-semibold text-foreground">Transactions</h2>
-        <div className="flex items-center gap-1 rounded-xl bg-secondary p-1">
+        <div className="flex items-center gap-1 border-2 border-foreground bg-secondary p-1">
           {filters.map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={cn(
-                "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
-                filter === f ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+                "border-2 px-3 py-1.5 text-xs font-semibold transition-colors",
+                filter === f
+                  ? "border-foreground bg-card text-foreground pixel-shadow-sm"
+                  : "border-transparent text-muted-foreground hover:border-foreground hover:text-foreground",
               )}
             >
               {f}
@@ -35,17 +37,14 @@ export function TransactionsList() {
         </div>
       </div>
 
-      <ul className="mt-4 flex flex-col">
+      <ul className="mt-4 flex flex-col divide-y-2 divide-border border-2 border-foreground bg-card">
         {visible.map((t) => {
           const incoming = t.amount > 0
           return (
-            <li
-              key={t.id}
-              className="flex items-center gap-3 border-b border-border py-3 last:border-0"
-            >
+            <li key={t.id} className="flex items-center gap-3 p-3">
               <span
                 className={cn(
-                  "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
+                  "inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-foreground text-xs font-semibold",
                   incoming ? "bg-accent text-accent-foreground" : "bg-secondary text-secondary-foreground",
                 )}
               >
