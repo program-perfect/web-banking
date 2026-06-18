@@ -4,17 +4,17 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts"
 import { spendingByCategory, formatUsd } from "@/lib/bank-data"
 
 export function SpendingBreakdown() {
-  const total = spendingByCategory.reduce((s, c) => s + c.value, 0)
+  const total = spendingByCategory.reduce((sum, category) => sum + category.value, 0)
 
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm md:p-6">
-      <div className="flex items-center justify-between">
+    <section className="pixel-card p-5 md:p-6">
+      <div className="flex items-center justify-between gap-3">
         <h2 className="text-base font-semibold text-foreground">Spending</h2>
-        <span className="text-xs font-medium text-muted-foreground">This month</span>
+        <span className="border-2 border-foreground bg-secondary px-2 py-1 text-xs font-medium text-muted-foreground">This month</span>
       </div>
 
-      <div className="mt-2 flex items-center gap-4">
-        <div className="relative h-32 w-32 shrink-0">
+      <div className="mt-3 flex items-center gap-4">
+        <div className="relative h-32 w-32 shrink-0 border-2 border-border bg-secondary/40">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -39,11 +39,11 @@ export function SpendingBreakdown() {
         </div>
 
         <ul className="flex-1 space-y-2">
-          {spendingByCategory.map((c) => (
-            <li key={c.category} className="flex items-center gap-2 text-sm">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: c.fill }} />
-              <span className="flex-1 text-muted-foreground">{c.category}</span>
-              <span className="font-medium tabular-nums text-foreground">{formatUsd(c.value)}</span>
+          {spendingByCategory.map((category) => (
+            <li key={category.category} className="flex items-center gap-2 text-sm">
+              <span className="h-2.5 w-2.5 border border-foreground" style={{ backgroundColor: category.fill }} />
+              <span className="flex-1 text-muted-foreground">{category.category}</span>
+              <span className="font-medium tabular-nums text-foreground">{formatUsd(category.value)}</span>
             </li>
           ))}
         </ul>
