@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useAppPreferences } from "@/components/banking/app-preferences"
 import { cn } from "@/lib/utils"
 
 type CursorMode = "default" | "pointer" | "press" | "text" | "grab" | "grabbing" | "wait" | "disabled"
@@ -219,6 +220,7 @@ function normalizeRows(rows: string[]) {
 }
 
 export function PixelCursor() {
+  const { cursorStyle, cursorGlow } = useAppPreferences()
   const cursorRef = useRef<HTMLDivElement>(null)
   const modeRef = useRef<CursorMode>("default")
   const pressedRef = useRef(false)
@@ -231,12 +233,17 @@ export function PixelCursor() {
   const normalized = normalizeRows(sprite.pixels)
 
   useEffect(() => {
-    const canUseCustomCursor = window.matchMedia("(pointer: fine)").matches
+    const canUseCustomCursor = window.matchMedia("(pointer: fine)").matches && cursorStyle !== "native"
     const root = document.documentElement
 
-    if (!canUseCustomCursor) return
+    if (!canUseCustomCursor) {
+      root.classList.remove("pixel-cursor-enabled")
+      return
+    }
 
     root.classList.add("pixel-cursor-enabled")
+    root.dataset.cursorSize = cursorStyle === "large" ? "large" : "normal"
+    root.dataset.cursorGlow = String(cursorGlow)
 
     function setMode(nextMode: CursorMode) {
       if (modeRef.current === nextMode) return
@@ -264,7 +271,7 @@ export function PixelCursor() {
 
       const current = currentRef.current
       const target = targetRef.current
-      const lerp = 0.24
+      const lerp = cursorStyle === "minimal" ? 0.36 : 0.22
 
       current.x += (target.x - current.x) * lerp
       current.y += (target.y - current.y) * lerp
@@ -315,7 +322,9 @@ export function PixelCursor() {
       document.documentElement.removeEventListener("mouseleave", handlePointerLeave)
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current)
     }
-  }, [])
+  }, [cursorStyle, cursorGlow])
+
+  if (cursorStyle === "native") return null
 
   return (
     <div ref={cursorRef} className="pixel-cursor pixel-cursor--hidden" data-mode={cursorMode} aria-hidden="true">
