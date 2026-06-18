@@ -21,13 +21,13 @@ export function QuickSend() {
   const recipient = contacts.find((c) => c.id === selected)
 
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm md:p-6">
+    <section className="pixel-card p-5 md:p-6">
       <h2 className="text-base font-semibold text-foreground">Quick send</h2>
 
       <div className="mt-4 flex items-center gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <button
           aria-label="Add recipient"
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-dashed border-border text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
+          className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-dashed border-foreground bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
         >
           <Plus className="h-5 w-5" />
         </button>
@@ -40,13 +40,13 @@ export function QuickSend() {
           >
             <Avatar
               className={cn(
-                "h-12 w-12 ring-2 transition-all",
-                selected === c.id ? "ring-primary" : "ring-transparent",
+                "h-12 w-12 rounded-none border-2 transition-all",
+                selected === c.id ? "border-foreground pixel-shadow-sm" : "border-transparent",
               )}
             >
               <AvatarFallback
                 className={cn(
-                  "text-sm font-semibold",
+                  "rounded-none text-sm font-semibold",
                   selected === c.id ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
                 )}
               >
@@ -59,7 +59,7 @@ export function QuickSend() {
       </div>
 
       <div className="mt-5">
-        <div className="rounded-2xl bg-secondary/60 p-4 text-center">
+        <div className="border-2 border-foreground bg-secondary/60 p-4 text-center">
           <p className="text-xs text-muted-foreground">Amount</p>
           <p className="mt-1 text-3xl font-semibold tracking-tight text-foreground tabular-nums">
             {formatUsd(amount)}
@@ -71,10 +71,10 @@ export function QuickSend() {
               key={p}
               onClick={() => setAmount(p)}
               className={cn(
-                "rounded-xl border py-2 text-sm font-semibold transition-colors",
+                "border-2 py-2 text-sm font-semibold transition-colors",
                 amount === p
-                  ? "border-primary bg-accent text-accent-foreground"
-                  : "border-border bg-card text-foreground hover:bg-secondary",
+                  ? "border-foreground bg-accent text-accent-foreground pixel-shadow-sm"
+                  : "border-foreground bg-card text-foreground hover:bg-secondary",
               )}
             >
               ${p}
@@ -86,8 +86,8 @@ export function QuickSend() {
       <button
         onClick={handleSend}
         className={cn(
-          "mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all",
-          sent ? "bg-success text-primary-foreground" : "bg-primary text-primary-foreground hover:opacity-90",
+          "pixel-btn mt-4 inline-flex w-full items-center justify-center gap-2 px-4 py-3 font-pixel text-[10px] uppercase",
+          sent ? "bg-success text-primary-foreground" : "bg-primary text-primary-foreground",
         )}
       >
         {sent ? (
